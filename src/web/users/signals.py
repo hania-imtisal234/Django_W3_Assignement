@@ -3,6 +3,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 from django.apps import apps
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
+
 
 @receiver(post_migrate)
 def create_user_groups(sender, **kwargs):
@@ -54,3 +58,9 @@ def create_user_groups(sender, **kwargs):
                     content_type=content_type,
                 )
             group.permissions.add(permission)
+
+
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
