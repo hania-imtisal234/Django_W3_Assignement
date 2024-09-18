@@ -19,8 +19,7 @@ class User(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"(id: {self.id}) {self.name}"
-
+        return self.name
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
